@@ -27,8 +27,10 @@ def translate(strl, sys1, sys2):
                     out_2+=chr(temp_3+848)
                 elif temp_3 == 168:
                     out_2+='Ё'
-                else:
+                elif temp_3 == 184:
                     out_2+='ё'
+                else:
+                    out_2+=chr(temp_3)
             return out_2
 # Перевод из симовольной в любую
     elif sys1 == 's':
@@ -82,3 +84,4 @@ def translate(strl, sys1, sys2):
                 temp_6 = strl[i:i+2] 
                 out_6+=str(bin(int(temp_6, 16)))[2:].zfill(8)
             return out_6
+
