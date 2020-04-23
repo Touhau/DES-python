@@ -424,9 +424,7 @@ class engine(gui):
             self.right_block_ent.delete(0, tk.END)
             self.round_key_block_ent.delete(0, tk.END)
 
-
-
-                
+               
 if __name__ == "__main__":
     window = tk.Tk()
     q = engine(window)
