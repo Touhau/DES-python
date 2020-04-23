@@ -15,7 +15,7 @@ class engine(gui):
         self.entry_crypt_3.trace('w', lambda *args: self.input_hex_key())
         self.type_of_crypt.trace('w', lambda *args: self.crypt())
         self.sys_of_not.trace('w', lambda *args: self.change())
-        # self.round_btn.config(command = self.crypt())
+        self.round_btn.config(command = lambda: self.round_info())
 
 # РАЗДЕЛ ВЫВОДЫ И ВВОДА ДАННЫХ
 # 
@@ -220,7 +220,6 @@ class engine(gui):
         rBlock.append(r0)
         lBlock.append(l0)
         for i in range(16):
-            print(i)
             e = ''
             temp_r = rBlock[i]
             lBlock.append(rBlock[i])
@@ -284,7 +283,7 @@ class engine(gui):
         cryptBeforeIPR = cryptL+cryptR
         finalCrypt = ''
         for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
-        return translate(finalCrypt, 'b', 'h')
+        return translate(finalCrypt, 'b', 'h'), rBlock, lBlock
 
     def decrypt(self, key):
         inputData = translate(self.entry_text_ent.get(), 'h', 'b')
@@ -297,7 +296,6 @@ class engine(gui):
         rBlock.append(r0)
         lBlock.append(l0)
         for i in range(16):
-            print(i)
             e = ''
             temp_l = lBlock[i]
             rBlock.append(lBlock[i])
@@ -363,26 +361,69 @@ class engine(gui):
         finalCrypt = ''
         for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
         
-        return translate(finalCrypt, 'b', 's')
+        return translate(finalCrypt, 'b', 's'), rBlock, lBlock
         
 
 
     def crypt(self):
         if (self.type_of_crypt.get() == 1) and (len(self.entry_text_ent.get()) == 8) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16): 
             self.keyArray_enc = self.keyPrepare()
-            encryptText = self.encrypt(self.keyArray_enc)
+            encryptText, self.re, self.le = self.encrypt(self.keyArray_enc)
             self.crypt_text_ent.delete(0, tk.END)
             self.crypt_text_ent.insert(0, encryptText)
             self.round_ent.delete(0, tk.END)
             self.round_ent.insert(0, '0')
-        elif self.type_of_crypt.get() == 2:
+            self.le.pop(0)
+            self.re.pop(0) 
+        elif (self.type_of_crypt.get() == 2) and (len(self.entry_text_ent.get()) == 16) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
             keyArray = self.keyPrepare()
-            keyArrayRevers = list(reversed(keyArray))
-            decryptText = self.decrypt(keyArrayRevers)
+            self.keyArrayRevers = list(reversed(keyArray))
+            decryptText, self.rd, self.ld = self.decrypt(self.keyArrayRevers)
             self.crypt_text_ent.delete(0, tk.END)
             self.crypt_text_ent.insert(0, decryptText)
             self.round_ent.delete(0, tk.END)
             self.round_ent.insert(0, '0')
+            self.ld.pop(0)
+            self.rd.pop(0)
+
+    def round_info(self):
+        if int(self.round_ent.get()) <16:
+            if self.type_of_crypt.get() == 1:
+                self.left_block_ent.delete(0, tk.END)
+                self.right_block_ent.delete(0, tk.END)
+                self.round_key_block_ent.delete(0, tk.END)
+                temp_counter = int(self.round_ent.get())
+                lb1 = ''
+                rb1 = ''
+                for i in self.le[temp_counter]: lb1+=str(i)
+                for i in self.re[temp_counter]: rb1+=str(i)
+                self.left_block_ent.insert(0, lb1)
+                self.right_block_ent.insert(0, rb1)
+                self.round_key_block_ent.insert(0, self.keyArray_enc[temp_counter])
+                self.round_ent.delete(0, tk.END)
+                self.round_ent.insert(0, str(temp_counter+1))
+            elif self.type_of_crypt.get() == 2: 
+                self.left_block_ent.delete(0, tk.END)
+                self.right_block_ent.delete(0, tk.END)
+                self.round_key_block_ent.delete(0, tk.END)
+                temp_counter = int(self.round_ent.get())
+                lb2 = ''
+                rb2 = ''
+                for i in self.le[temp_counter]: lb2+=str(i)
+                for i in self.re[temp_counter]: rb2+=str(i)
+                self.left_block_ent.insert(0, lb2)
+                self.right_block_ent.insert(0, rb2)
+                self.round_key_block_ent.insert(0, self.keyArrayRevers[temp_counter])
+                self.round_ent.delete(0, tk.END)
+                self.round_ent.insert(0, str(temp_counter+1))
+            else:
+                mb.showerror('Ошибка', message = 'Не выбран тип шифрования')
+        else:
+            self.round_ent.delete(0, tk.END)
+            self.round_ent.insert(0, '0')
+            self.left_block_ent.delete(0, tk.END)
+            self.right_block_ent.delete(0, tk.END)
+            self.round_key_block_ent.delete(0, tk.END)
 
 
 
