@@ -25,9 +25,9 @@ class gui(tk.Frame):
 
         self.sys_of_not = tk.IntVar()
 
-        self.sym_rb = tk.Radiobutton(self.lblFrame1, value = 1, variable = self.sys_of_not, font = 'Arial 14', text = 'Сивольная')
+        self.sym_rb = tk.Radiobutton(self.lblFrame1, value = 1, variable = self.sys_of_not, font = 'Arial 14', text = 'Символьная')
         self.bin_rb = tk.Radiobutton(self.lblFrame1, value = 2, variable = self.sys_of_not, font = 'Arial 14', text = 'Двоичная')
-        self.hex_rb = tk.Radiobutton(self.lblFrame1, value = 3, variable = self.sys_of_not, font = 'Arial 14', text = 'Шестнадцатиричная')
+        self.hex_rb = tk.Radiobutton(self.lblFrame1, value = 3, variable = self.sys_of_not, font = 'Arial 14', text = 'Шестнадцатеричная')
 
         self.entry_text_sys_lbl = tk.Label(self.lblFrame2, font = 'Arial 14', text = 'Открытый текст')
         self.crypt_key_sys_lbl = tk.Label(self.lblFrame2, font = 'Arial 14', text = 'Ключ шифрования')
