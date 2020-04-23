@@ -363,16 +363,17 @@ class engine(gui):
         
         return translate(finalCrypt, 'b', 's'), rBlock, lBlock
         
-
-
     def crypt(self):
+        self.left_block_ent.delete(0, tk.END)
+        self.right_block_ent.delete(0, tk.END)
+        self.round_key_block_ent.delete(0, tk.END)
+        self.round_ent.delete(0, tk.END)
+        self.round_ent.insert(0, '0')
         if (self.type_of_crypt.get() == 1) and (len(self.entry_text_ent.get()) == 8) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16): 
             self.keyArray_enc = self.keyPrepare()
             encryptText, self.re, self.le = self.encrypt(self.keyArray_enc)
             self.crypt_text_ent.delete(0, tk.END)
             self.crypt_text_ent.insert(0, encryptText)
-            self.round_ent.delete(0, tk.END)
-            self.round_ent.insert(0, '0')
             self.le.pop(0)
             self.re.pop(0) 
         elif (self.type_of_crypt.get() == 2) and (len(self.entry_text_ent.get()) == 16) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
@@ -381,8 +382,6 @@ class engine(gui):
             decryptText, self.rd, self.ld = self.decrypt(self.keyArrayRevers)
             self.crypt_text_ent.delete(0, tk.END)
             self.crypt_text_ent.insert(0, decryptText)
-            self.round_ent.delete(0, tk.END)
-            self.round_ent.insert(0, '0')
             self.ld.pop(0)
             self.rd.pop(0)
 
