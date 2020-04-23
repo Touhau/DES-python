@@ -2,6 +2,7 @@ import tkinter as tk
 from guiDES import gui
 from transform import translate
 from tkinter import messagebox as mb
+import table as tb
 import random
 
 
@@ -12,11 +13,16 @@ class engine(gui):
         self.entry_crypt_1.trace('w', lambda *args: self.control())
         self.entry_crypt_2.trace('w', lambda *args: self.input_symbol_key())
         self.entry_crypt_3.trace('w', lambda *args: self.input_hex_key())
+        self.type_of_crypt.trace('w', lambda *args: self.crypt())
         self.sys_of_not.trace('w', lambda *args: self.change())
+        # self.round_btn.config(command = self.crypt())
 
-
+# РАЗДЕЛ ВЫВОДЫ И ВВОДА ДАННЫХ
+# 
+# 
+# 
     def control(self):
-        self.entry_text_ent.delete(8, tk.END)
+        self.entry_text_ent.delete(16, tk.END)
         self.entry_text_sys_ent.delete(0, tk.END)
         self.crypt_key_sys_ent.delete(0, tk.END)
         self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
@@ -111,10 +117,14 @@ class engine(gui):
 
 #  Функция которая выводит в заданной системе счисления входные данные 
     def change(self):
-        if (len(self.entry_text_ent.get()) == 8) and (len(self.crypt_key_ent.get()) == 7) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
+        if ((len(self.entry_text_ent.get()) == 8) or (len(self.entry_text_ent.get()) == 16)) and (len(self.crypt_key_ent.get()) == 7) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
             if self.sys_of_not.get() == 1:
-                self.entry_text_sys_ent.delete(0, tk.END)
-                self.entry_text_sys_ent.insert(0, self.entry_text_ent.get())
+                if len(self.entry_text_ent.get()) == 8:
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, self.entry_text_ent.get())
+                else:
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 'h', 's'))
                 self.crypt_key_sys_ent.delete(0, tk.END)
                 self.crypt_key_sys_ent.insert(0, self.crypt_key_ent.get())
                 output_str = translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 's')
@@ -125,36 +135,256 @@ class engine(gui):
                 self.entry_text_sys_ent.delete(0, tk.END)
                 self.crypt_key_sys_ent.delete(0, tk.END)
                 self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
-                os_1 = translate(self.entry_text_ent.get(), 's', 'b')
-                if len(self.crypt_key_ent.get())==7:
-                    os_2 = translate(self.crypt_key_ent.get(), 's', 'b')
+                if len(self.entry_text_ent.get()) == 8:
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 's', 'b'))
                 else:
-                    os_2 = translate(self.crypt_key_ent.get(), 'h', 'b')
-                os_3 = translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'b')
-                self.entry_text_sys_ent.insert(0, os_1)
-                self.crypt_key_sys_ent.insert(0, os_2)
-                self.crypt_key_ctrl_bit_sys_ent.insert(0, os_3)
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 'h', 'b'))
+                self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'b'))
+                self.crypt_key_ctrl_bit_sys_ent.insert(0, translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'b'))
             
             elif self.sys_of_not.get() == 3:
                 self.entry_text_sys_ent.delete(0, tk.END)
                 self.crypt_key_sys_ent.delete(0, tk.END)
                 self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
-                os_1 = translate(self.entry_text_ent.get(), 's', 'h')
-                if len(self.crypt_key_ent.get())==7:
-                    os_2 = translate(self.crypt_key_ent.get(), 's', 'h')
+                if len(self.entry_text_ent.get()) == 8:
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 's', 'h'))
                 else:
-                    os_2 = translate(self.crypt_key_ent.get(), 'h', 'h')
-                os_3 = translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'h')
-                self.entry_text_sys_ent.insert(0, os_1)
-                self.crypt_key_sys_ent.insert(0, os_2)
-                self.crypt_key_ctrl_bit_sys_ent.insert(0, os_3)
+                    self.entry_text_sys_ent.delete(0, tk.END)
+                    self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 'h', 'h'))
+                self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'h'))
+                self.crypt_key_ctrl_bit_sys_ent.insert(0, translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'h'))
             else:
                 self.entry_text_sys_ent.delete(0, tk.END)
                 self.crypt_key_sys_ent.delete(0, tk.END)
                 self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
        
+# РАЗДЕЛ ШИФРОВАНИЯ ДЕШИФРОВАНИЯ
+# 
+# 
+# 
+    def shift(self, strk, n):
+        for i in range(n):
+            strk.append(strk.pop(0))
+        return strk
+
+    def keyPrepare(self):
+        input_Key = translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'b')
+        Key1 = []
+        gKey = []
+        cArray = []
+        dArray = []
+        readyKey = []
+        # Получение ключа 64 бита
+        for i in input_Key: Key1.append(int(i))
+        # G матрица первоначальной подготовки ключа
+        for i in range(56): gKey.append(Key1[tb.gBox[i]-1])
+        # Получаем заготовки для сдвигов 
+        c0 = gKey[:28]
+        d0 = gKey[28:]
+        cArray.append(c0)
+        dArray.append(d0)
+        for i in range(16):
+            hKey = []
+
+            tempC = self.shift(cArray[i], tb.shiftBox[i])
+            cTemp = ''
+            tempD = self.shift(dArray[i], tb.shiftBox[i])
+            dTemp = ''
             
+            cArray.append(tempC)
+            dArray.append(tempD)
+
+            for j in tempC: cTemp+=str(j)
+            for k in tempD: dTemp+=str(k)
+            tempKey = cTemp+dTemp
+
+            for a in range(48): hKey.append(int(tempKey[tb.hBox[a]-1]))
+
+            readyStrKey = ''
+            for y in hKey: readyStrKey+=str(y)
+            readyKey.append(readyStrKey)
+
+        return readyKey
+        
+    def encrypt(self, key):
+        inputData = translate(self.entry_text_ent.get(), 's', 'b')
+        inputPer = []
+        rBlock = []
+        lBlock = []
+        for i in range(64): inputPer.append(int(inputData[tb.ip[i]-1]))
+        l0 = inputPer[:32]
+        r0 = inputPer[32:]
+        rBlock.append(r0)
+        lBlock.append(l0)
+        for i in range(16):
+            print(i)
+            e = ''
+            temp_r = rBlock[i]
+            lBlock.append(rBlock[i])
+            for q in range(32): e+=str(temp_r[tb.eBox[q]-1])
+            ek = str(bin(int(e,2)^int(key[i],2)))[2:].zfill(48)
+            eks = [ek[w:w+6] for w in range(0, 48, 6)]
+            s1 = eks[0]
+            s2 = eks[1]
+            s3 = eks[2]
+            s4 = eks[3]
+            s5 = eks[4]
+            s6 = eks[5]
+            s7 = eks[6]
+            s8 = eks[7]
+            s1_x = int((s1[0]+s1[5]),2)
+            s1_y = int((s1[1]+s1[2]+s1[3]+s1[4]),2)
+
+            s2_x = int((s2[0]+s2[5]),2)
+            s2_y = int((s2[1]+s2[2]+s2[3]+s2[4]),2)
+
+            s3_x = int((s3[0]+s3[5]),2)
+            s3_y = int((s3[1]+s3[2]+s3[3]+s3[4]),2)
+
+            s4_x = int((s4[0]+s4[5]),2)
+            s4_y = int((s4[1]+s4[2]+s4[3]+s4[4]),2)
+
+            s5_x = int((s5[0]+s5[5]),2)
+            s5_y = int((s5[1]+s5[2]+s5[3]+s5[4]),2)
+
+            s6_x = int((s6[0]+s6[5]),2)
+            s6_y = int((s6[1]+s6[2]+s6[3]+s6[4]),2)
+
+            s7_x = int((s7[0]+s7[5]),2)
+            s7_y = int((s7[1]+s7[2]+s7[3]+s7[4]),2)
+
+            s8_x = int((s8[0]+s8[5]),2)
+            s8_y = int((s8[1]+s8[2]+s8[3]+s8[4]),2)
             
+            newS_1 = str(bin(tb.sb1[s1_x][s1_y]))[2:].zfill(4)
+            newS_2 = str(bin(tb.sb2[s2_x][s2_y]))[2:].zfill(4)
+            newS_3 = str(bin(tb.sb3[s3_x][s3_y]))[2:].zfill(4)
+            newS_4 = str(bin(tb.sb4[s4_x][s4_y]))[2:].zfill(4)
+            newS_5 = str(bin(tb.sb5[s5_x][s5_y]))[2:].zfill(4)
+            newS_6 = str(bin(tb.sb6[s6_x][s6_y]))[2:].zfill(4)
+            newS_7 = str(bin(tb.sb7[s7_x][s7_y]))[2:].zfill(4)
+            newS_8 = str(bin(tb.sb8[s8_x][s8_y]))[2:].zfill(4)
+            pPrepare = newS_1 + newS_2 + newS_3 + newS_4 + newS_5 + newS_6 + newS_7 + newS_8 
+            rP = ''
+            for z in range(32): rP+=pPrepare[tb.pBox[z]-1]
+            tempL = lBlock[i]
+            lforXOR = ''
+            for f in tempL: lforXOR+=str(f)
+            finalR = str(bin(int(lforXOR,2)^int(rP,2)))[2:].zfill(32)
+            NewR = []
+            for v in finalR: NewR.append(int(v))
+            rBlock.append(NewR)
+        cryptL = ''
+        cryptR = ''
+        for i in lBlock[16]: cryptL+=str(i)
+        for i in rBlock[16]: cryptR+=str(i)
+        cryptBeforeIPR = cryptL+cryptR
+        finalCrypt = ''
+        for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
+        return translate(finalCrypt, 'b', 'h')
+
+    def decrypt(self, key):
+        inputData = translate(self.entry_text_ent.get(), 'h', 'b')
+        inputPer = []
+        rBlock = []
+        lBlock = []
+        for i in range(64): inputPer.append(int(inputData[tb.ip[i]-1]))
+        l0 = inputPer[:32]
+        r0 = inputPer[32:]
+        rBlock.append(r0)
+        lBlock.append(l0)
+        for i in range(16):
+            print(i)
+            e = ''
+            temp_l = lBlock[i]
+            rBlock.append(lBlock[i])
+            for q in range(32): e+=str(temp_l[tb.eBox[q]-1])
+            ek = str(bin(int(e,2)^int(key[i],2)))[2:].zfill(48)
+            eks = [ek[w:w+6] for w in range(0, 48, 6)]
+            s1 = eks[0]
+            s2 = eks[1]
+            s3 = eks[2]
+            s4 = eks[3]
+            s5 = eks[4]
+            s6 = eks[5]
+            s7 = eks[6]
+            s8 = eks[7]
+            s1_x = int((s1[0]+s1[5]),2)
+            s1_y = int((s1[1]+s1[2]+s1[3]+s1[4]),2)
+
+            s2_x = int((s2[0]+s2[5]),2)
+            s2_y = int((s2[1]+s2[2]+s2[3]+s2[4]),2)
+
+            s3_x = int((s3[0]+s3[5]),2)
+            s3_y = int((s3[1]+s3[2]+s3[3]+s3[4]),2)
+
+            s4_x = int((s4[0]+s4[5]),2)
+            s4_y = int((s4[1]+s4[2]+s4[3]+s4[4]),2)
+
+            s5_x = int((s5[0]+s5[5]),2)
+            s5_y = int((s5[1]+s5[2]+s5[3]+s5[4]),2)
+
+            s6_x = int((s6[0]+s6[5]),2)
+            s6_y = int((s6[1]+s6[2]+s6[3]+s6[4]),2)
+
+            s7_x = int((s7[0]+s7[5]),2)
+            s7_y = int((s7[1]+s7[2]+s7[3]+s7[4]),2)
+
+            s8_x = int((s8[0]+s8[5]),2)
+            s8_y = int((s8[1]+s8[2]+s8[3]+s8[4]),2)
+            
+            newS_1 = str(bin(tb.sb1[s1_x][s1_y]))[2:].zfill(4)
+            newS_2 = str(bin(tb.sb2[s2_x][s2_y]))[2:].zfill(4)
+            newS_3 = str(bin(tb.sb3[s3_x][s3_y]))[2:].zfill(4)
+            newS_4 = str(bin(tb.sb4[s4_x][s4_y]))[2:].zfill(4)
+            newS_5 = str(bin(tb.sb5[s5_x][s5_y]))[2:].zfill(4)
+            newS_6 = str(bin(tb.sb6[s6_x][s6_y]))[2:].zfill(4)
+            newS_7 = str(bin(tb.sb7[s7_x][s7_y]))[2:].zfill(4)
+            newS_8 = str(bin(tb.sb8[s8_x][s8_y]))[2:].zfill(4)
+            
+            pPrepare = newS_1 + newS_2 + newS_3 + newS_4 + newS_5 + newS_6 + newS_7 + newS_8 
+            lP = ''
+            for z in range(32): lP+=pPrepare[tb.pBox[z]-1]
+            tempR = rBlock[i]
+            rforXOR = ''
+            for f in tempR: rforXOR+=str(f)
+            finalL = str(bin(int(rforXOR,2)^int(lP,2)))[2:].zfill(32)
+            NewL = []
+            for v in finalL: NewL.append(int(v))
+            lBlock.append(NewL)
+        cryptL = ''
+        cryptR = ''
+        for i in lBlock[16]: cryptL+=str(i)
+        for i in rBlock[16]: cryptR+=str(i)
+        cryptBeforeIPR = cryptL+cryptR
+        finalCrypt = ''
+        for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
+        
+        return translate(finalCrypt, 'b', 's')
+        
+
+
+    def crypt(self):
+        if (self.type_of_crypt.get() == 1) and (len(self.entry_text_ent.get()) == 8) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16): 
+            self.keyArray_enc = self.keyPrepare()
+            encryptText = self.encrypt(self.keyArray_enc)
+            self.crypt_text_ent.delete(0, tk.END)
+            self.crypt_text_ent.insert(0, encryptText)
+            self.round_ent.delete(0, tk.END)
+            self.round_ent.insert(0, '0')
+        elif self.type_of_crypt.get() == 2:
+            keyArray = self.keyPrepare()
+            keyArrayRevers = list(reversed(keyArray))
+            decryptText = self.decrypt(keyArrayRevers)
+            self.crypt_text_ent.delete(0, tk.END)
+            self.crypt_text_ent.insert(0, decryptText)
+            self.round_ent.delete(0, tk.END)
+            self.round_ent.insert(0, '0')
+
+
 
                 
 if __name__ == "__main__":

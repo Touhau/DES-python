@@ -15,7 +15,7 @@ class gui(tk.Frame):
         self.crypt_key_lbl = tk.Label(window, font = 'Arial 14', text = 'Введите ключ шифрования (7 символов)')
         self.crypt_key_ctrl_bit_lbl = tk.Label(window, font = 'Arial 14', text = 'Ключ шифрования с битами чётности')
 
-        self.entry_text_ent = tk.Entry(window, font = 'Arial 14', width = 15, textvariable = self.entry_crypt_1)
+        self.entry_text_ent = tk.Entry(window, font = 'Arial 14', width = 20, textvariable = self.entry_crypt_1)
         self.crypt_key_ent = tk.Entry(window, font = 'Arial 14', width = 30, textvariable = self.entry_crypt_2)
         self.crypt_key_ctrl_bit_ent = tk.Entry(window, font = 'Arial 14', width = 30, textvariable = self.entry_crypt_3)
 
@@ -39,6 +39,7 @@ class gui(tk.Frame):
 
         self.round_lbl = tk.Label(self.lblFrame3, font = 'Arial 14', text = 'Раунд')
         self.round_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 3)
+        self.round_ent.insert(0, '0')
         self.round_btn = tk.Button(self.lblFrame3, font = 'Arial 14', text = 'Следующий раунд')
 
         self.type_of_crypt = tk.IntVar()
@@ -50,13 +51,12 @@ class gui(tk.Frame):
         self.right_block_lbl = tk.Label(self.lblFrame3, font = 'Arial 14', text = 'Правый полублок')
         self.round_key_block_lbl = tk.Label(self.lblFrame3, font = 'Arial 14', text = 'Раундовый ключ')
 
-        self.left_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 35)
-        self.right_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 35)
-        self.round_key_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 35)
+        self.left_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 73)
+        self.right_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 73)
+        self.round_key_block_ent = tk.Entry(self.lblFrame3, font = 'Arial 14', width = 73)
 
         self.crypt_text_lbl = tk.Label(window, font = 'Arial 14', text = 'Зашифрованный текст')
-        self.crypt_text_ent = tk.Entry(window, font = 'Arial 14', width = 45)
-
+        self.crypt_text_ent = tk.Entry(window, font = 'Arial 14', width = 65)
 
         self.entry_text_lbl.grid(row = 0, column = 0, padx = 6)
         self.crypt_key_lbl.grid(row = 0, column = 1, columnspan = 2, padx = 6)
@@ -95,19 +95,6 @@ class gui(tk.Frame):
 
         self.crypt_text_lbl.grid(row = 5, column = 0,  sticky = 'w')
         self.crypt_text_ent.grid(row = 5, column = 1, columnspan = 4, sticky = 'w')     
-
-        
-        
-        
-        
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
     window = tk.Tk()
