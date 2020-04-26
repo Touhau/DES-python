@@ -28,12 +28,12 @@ class engine(gui):
         self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
         if 1 <= self.sys_of_not.get() <= 3:
             self.change()
-            
+     
     def input_symbol_key(self):
         self.entry_text_sys_ent.delete(0, tk.END)
         self.crypt_key_sys_ent.delete(0, tk.END)
         self.crypt_key_ctrl_bit_sys_ent.delete(0, tk.END)
-        if len(self.crypt_key_ent.get()) >= 7:
+        if len(self.crypt_key_ent.get()) == 7:
             temp = translate(self.crypt_key_ent.get(), 's', 'b')
             temp = temp[:56]
             temp_1 = self.ctrlBit(temp)
@@ -54,6 +54,10 @@ class engine(gui):
 
         if len(self.crypt_key_ctrl_bit_ent.get()) == 16:
             t_out = self.ctrlBitReverse(self.crypt_key_ctrl_bit_ent.get())
+            if translate(t_out, 's', 'h') == '00000000000000':
+                self.zero_value = 1
+            else:
+                self.zero_value = 0
             self.crypt_key_ent.delete(0, tk.END)
             self.crypt_key_ent.insert(0, t_out)
             self.crypt_key_ctrl_bit_ent.delete(16, tk.END)
@@ -107,17 +111,15 @@ class engine(gui):
     def ctrlBitReverse(self, strk):
         temp = translate(strk, 'h', 'b')
         b = [temp[i:i+8] for i in range(0, 64, 8)]
-        
         c = ''
         for i in b:
             c+=i[0:7]
-            
         c1 = translate(c, 'b', 's')
         return c1
 
 #  Функция которая выводит в заданной системе счисления входные данные 
     def change(self):
-        if ((len(self.entry_text_ent.get()) == 8) or (len(self.entry_text_ent.get()) == 16)) and (len(self.crypt_key_ent.get()) == 7) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
+        if ((len(self.entry_text_ent.get()) == 8) or (len(self.entry_text_ent.get()) == 16))  and (len(self.crypt_key_ctrl_bit_ent.get()) == 16):
             if self.sys_of_not.get() == 1:
                 if len(self.entry_text_ent.get()) == 8:
                     self.entry_text_sys_ent.delete(0, tk.END)
@@ -141,7 +143,10 @@ class engine(gui):
                 else:
                     self.entry_text_sys_ent.delete(0, tk.END)
                     self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 'h', 'b'))
-                self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'b'))
+                if self.zero_value == 0:
+                    self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'b'))
+                else:
+                    self.crypt_key_sys_ent.insert(0, translate('00000000000000', 'h', 'b'))
                 self.crypt_key_ctrl_bit_sys_ent.insert(0, translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'b'))
             
             elif self.sys_of_not.get() == 3:
@@ -154,7 +159,10 @@ class engine(gui):
                 else:
                     self.entry_text_sys_ent.delete(0, tk.END)
                     self.entry_text_sys_ent.insert(0, translate(self.entry_text_ent.get(), 'h', 'h'))
-                self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'h'))
+                if self.zero_value == 0:
+                    self.crypt_key_sys_ent.insert(0, translate(self.crypt_key_ent.get(), 's', 'h'))
+                else:
+                    self.crypt_key_sys_ent.insert(0, translate('00000000000000', 'h', 'h'))
                 self.crypt_key_ctrl_bit_sys_ent.insert(0, translate(self.crypt_key_ctrl_bit_ent.get(), 'h', 'h'))
             else:
                 self.entry_text_sys_ent.delete(0, tk.END)
@@ -210,7 +218,10 @@ class engine(gui):
         return readyKey
         
     def encrypt(self, key):
-        inputData = translate(self.entry_text_ent.get(), 's', 'b')
+        if len(self.entry_text_ent.get()) == 8:
+            inputData = translate(self.entry_text_ent.get(), 's', 'b')
+        else:
+            inputData = translate(self.entry_text_ent.get(), 'h', 'b')
         inputPer = []
         rBlock = []
         lBlock = []
@@ -283,7 +294,11 @@ class engine(gui):
         cryptBeforeIPR = cryptL+cryptR
         finalCrypt = ''
         for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
-        return translate(finalCrypt, 'b', 'h'), rBlock, lBlock
+        if len(self.entry_text_ent.get()) == 8:
+            return translate(finalCrypt, 'b', 'h'), rBlock, lBlock
+        else:
+            return translate(finalCrypt, 'b', 's'), rBlock, lBlock
+        # return translate(finalCrypt, 'b', 'h'), rBlock, lBlock
 
     def decrypt(self, key):
         inputData = translate(self.entry_text_ent.get(), 'h', 'b')
@@ -369,7 +384,7 @@ class engine(gui):
         self.round_key_block_ent.delete(0, tk.END)
         self.round_ent.delete(0, tk.END)
         self.round_ent.insert(0, '0')
-        if (self.type_of_crypt.get() == 1) and (len(self.entry_text_ent.get()) == 8) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16): 
+        if (self.type_of_crypt.get() == 1) and ((len(self.entry_text_ent.get()) == 8) or (len(self.entry_text_ent.get()) == 16)) and (len(self.crypt_key_ctrl_bit_ent.get()) == 16): 
             self.keyArray_enc = self.keyPrepare()
             encryptText, self.re, self.le = self.encrypt(self.keyArray_enc)
             self.crypt_text_ent.delete(0, tk.END)
