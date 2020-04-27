@@ -47,6 +47,7 @@ class engine(gui):
             self.change()
 
     def input_hex_key(self):
+        self.crypt_key_ctrl_bit_ent.delete(16, tk.END)
 
         self.entry_text_sys_ent.delete(0, tk.END)
         self.crypt_key_sys_ent.delete(0, tk.END)
@@ -61,6 +62,7 @@ class engine(gui):
             self.crypt_key_ent.delete(0, tk.END)
             self.crypt_key_ent.insert(0, t_out)
             self.crypt_key_ctrl_bit_ent.delete(16, tk.END)
+
         if 1 <= self.sys_of_not.get() <= 3:
             self.change()
         
