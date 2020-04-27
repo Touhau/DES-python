@@ -290,8 +290,10 @@ class engine(gui):
         cryptL = ''
         cryptR = ''
         for i in lBlock[16]: cryptL+=str(i)
+        
         for i in rBlock[16]: cryptR+=str(i)
-        cryptBeforeIPR = cryptL+cryptR
+       
+        cryptBeforeIPR = cryptR+cryptL
         finalCrypt = ''
         for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
         if len(self.entry_text_ent.get()) == 8:
@@ -306,8 +308,8 @@ class engine(gui):
         rBlock = []
         lBlock = []
         for i in range(64): inputPer.append(int(inputData[tb.ip[i]-1]))
-        l0 = inputPer[:32]
-        r0 = inputPer[32:]
+        r0 = inputPer[:32]
+        l0 = inputPer[32:]
         rBlock.append(r0)
         lBlock.append(l0)
         for i in range(16):
@@ -371,7 +373,9 @@ class engine(gui):
         cryptL = ''
         cryptR = ''
         for i in lBlock[16]: cryptL+=str(i)
+        
         for i in rBlock[16]: cryptR+=str(i)
+        
         cryptBeforeIPR = cryptL+cryptR
         finalCrypt = ''
         for i in range(64): finalCrypt+=cryptBeforeIPR[tb.ipr[i]-1]
